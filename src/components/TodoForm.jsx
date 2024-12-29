@@ -1,9 +1,28 @@
+import axios from "axios";
+import { useState } from "react";
+
 const TodoForm = () => {
-  const submitForm = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
-    console.log("Form Submitted:", data);
+  const [formData, setFormData] = useState({
+    projectName: "",
+    logoUrl: "",
+    projectLink: "",
+  });
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "https://airdroptaskbook-server.vercel.app/galxe/galxeform",
+        formData
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(" there is some error" + error);
+    }
   };
 
   return (
@@ -12,7 +31,7 @@ const TodoForm = () => {
         <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
           Todo Form
         </h2>
-        <form onSubmit={submitForm} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="projectName"
@@ -21,11 +40,13 @@ const TodoForm = () => {
               Todo Form
             </label>
             <input
+              value={formData.projectName}
               type="text"
               id="projectName"
               name="projectName"
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={handleOnChange}
             />
           </div>
           <div>
@@ -36,11 +57,13 @@ const TodoForm = () => {
               Logo URL
             </label>
             <input
+              value={formData.logoUrl}
               type="text"
               id="logoUrl"
               name="logoUrl"
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={handleOnChange}
             />
           </div>
           <div>
@@ -51,11 +74,13 @@ const TodoForm = () => {
               Project Link
             </label>
             <input
+              value={formData.projectLink}
               type="text"
               id="projectLink"
               name="projectLink"
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={handleOnChange}
             />
           </div>
           <div>
