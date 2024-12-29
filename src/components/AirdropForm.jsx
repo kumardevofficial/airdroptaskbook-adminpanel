@@ -8,19 +8,32 @@ const AirdropForm = () => {
     projectLink: "",
   });
 
+  const [successMessage, setSuccessMessage] = useState(""); // New state for success feedback
+  const [errorMessage, setErrorMessage] = useState(""); // New state for error feedback
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSuccessMessage(""); // Reset success message
+    setErrorMessage(""); // Reset error message
+
     try {
       const response = await axios.post(
         "https://airdroptaskbook-server.vercel.app/airdrop/airdropform",
         formData
       );
+      setSuccessMessage("Form submitted successfully!");
+      setFormData({ projectName: "", logoUrl: "", projectLink: "" }); // Reset form data
       console.log(response.data);
     } catch (error) {
+      setErrorMessage(
+        error.response?.data?.message ||
+          "An error occurred while submitting the form."
+      );
       console.error("Error details:", error.response || error.message);
     }
   };
@@ -29,7 +42,7 @@ const AirdropForm = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-          Todo Form
+          Airdrop Form
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -37,7 +50,7 @@ const AirdropForm = () => {
               htmlFor="projectName"
               className="block text-sm font-medium text-gray-700"
             >
-              Todo Form
+              Project Name
             </label>
             <input
               value={formData.projectName}
@@ -58,7 +71,7 @@ const AirdropForm = () => {
             </label>
             <input
               value={formData.logoUrl}
-              type="text"
+              type="url" // Updated for URL validation
               id="logoUrl"
               name="logoUrl"
               required
@@ -75,7 +88,7 @@ const AirdropForm = () => {
             </label>
             <input
               value={formData.projectLink}
-              type="text"
+              type="url" // Updated for URL validation
               id="projectLink"
               name="projectLink"
               required
@@ -92,6 +105,12 @@ const AirdropForm = () => {
             </button>
           </div>
         </form>
+        {successMessage && (
+          <p className="text-green-600 text-sm mt-4">{successMessage}</p>
+        )}
+        {errorMessage && (
+          <p className="text-red-600 text-sm mt-4">{errorMessage}</p>
+        )}
       </div>
     </div>
   );

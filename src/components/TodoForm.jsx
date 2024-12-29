@@ -12,16 +12,26 @@ const TodoForm = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://airdroptaskbook-server.vercel.app/galxe/galxeform",
+        "https://airdroptaskbook-server.vercel.app/airdrop/airdropform",
         formData
       );
-      console.log(response);
+      console.log("Form submitted successfully:", response.data);
+      // Reset form fields
+      setFormData({
+        projectName: "",
+        logoUrl: "",
+        projectLink: "",
+      });
     } catch (error) {
-      console.error(" there is some error" + error);
+      console.error(
+        "Error submitting the form:",
+        error.response?.data || error.message
+      );
     }
   };
 
@@ -37,7 +47,7 @@ const TodoForm = () => {
               htmlFor="projectName"
               className="block text-sm font-medium text-gray-700"
             >
-              Todo Form
+              Project Name
             </label>
             <input
               value={formData.projectName}
@@ -58,7 +68,7 @@ const TodoForm = () => {
             </label>
             <input
               value={formData.logoUrl}
-              type="text"
+              type="url" // Use 'url' for better validation
               id="logoUrl"
               name="logoUrl"
               required
@@ -75,7 +85,7 @@ const TodoForm = () => {
             </label>
             <input
               value={formData.projectLink}
-              type="text"
+              type="url" // Use 'url' for better validation
               id="projectLink"
               name="projectLink"
               required
