@@ -1,18 +1,50 @@
+import { useState } from "react";
+import axios from "axios";
+
 const GalxeForm = () => {
-  const submitForm = (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
-    console.log("Form Submitted:", data);
+  const [formData, setFormData] = useState({
+    projectName: "",
+    logoUrl: "",
+    projectLink: "",
+  });
+
+  const [successMessage, setSuccessMessage] = useState(""); // New state for success feedback
+  const [errorMessage, setErrorMessage] = useState(""); // New state for error feedback
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSuccessMessage(""); // Reset success message
+    setErrorMessage(""); // Reset error message
+
+    try {
+      const response = await axios.post(
+        "https://airdroptaskbook-server.vercel.app/galxeairdrop/galxeairdropform",
+        formData
+      );
+      setSuccessMessage("Form submitted successfully!");
+      setFormData({ projectName: "", logoUrl: "", projectLink: "" }); // Reset form data
+      console.log(response.data);
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.message ||
+          "An error occurred while submitting the form."
+      );
+      console.error("Error details:", error.response || error.message);
+    }
   };
 
   return (
-    <div className="flex  justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
-          Galxe Form
+          Galxe Airdrop Form
         </h2>
-        <form onSubmit={submitForm} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
               htmlFor="projectName"
@@ -21,11 +53,13 @@ const GalxeForm = () => {
               Project Name
             </label>
             <input
+              value={formData.projectName}
               type="text"
               id="projectName"
               name="projectName"
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={handleOnChange}
             />
           </div>
           <div>
@@ -36,11 +70,13 @@ const GalxeForm = () => {
               Logo URL
             </label>
             <input
-              type="text"
+              value={formData.logoUrl}
+              type="url" // Updated for URL validation
               id="logoUrl"
               name="logoUrl"
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={handleOnChange}
             />
           </div>
           <div>
@@ -51,11 +87,13 @@ const GalxeForm = () => {
               Project Link
             </label>
             <input
-              type="text"
+              value={formData.projectLink}
+              type="url" // Updated for URL validation
               id="projectLink"
               name="projectLink"
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              onChange={handleOnChange}
             />
           </div>
           <div>
@@ -67,6 +105,12 @@ const GalxeForm = () => {
             </button>
           </div>
         </form>
+        {successMessage && (
+          <p className="text-green-600 text-sm mt-4">{successMessage}</p>
+        )}
+        {errorMessage && (
+          <p className="text-red-600 text-sm mt-4">{errorMessage}</p>
+        )}
       </div>
     </div>
   );
