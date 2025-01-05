@@ -9,7 +9,7 @@ const Header = () => {
             <Link to="/airdropform">Airdrop </Link>
           </li>
           <li>
-            <Link to="/galxeform">Galxe</Link>
+            <Link to="/projectfomr.jsx">Project</Link>
           </li>
           <li>
             <Link to="/waitlistform">Waitlist</Link>
