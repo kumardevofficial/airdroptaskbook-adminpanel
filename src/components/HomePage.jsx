@@ -3,10 +3,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
 import StylishSearchBox from "./StylishSerachBox";
+import PopUpBox from "./PopupBox";
 
 const HomePage = () => {
   const [airdropList, setAirdropList] = useState([]);
   const [loading, setLoading] = useState(true); // Add a loading state
+  const [visible, setVisible] = useState(false);
+
+  // const changeVisiblity = (visiblityValue) => {
+  //   setVisible(visiblityValue);
+  // };
 
   const getData = async () => {
     setLoading(true); // Start loading
@@ -41,10 +47,13 @@ const HomePage = () => {
               key={index} // Add a key for each item
               index={index}
               itemData={item}
+              poupVisiblity={{ visible, setVisible }}
             />
           ))}
         </div>
       )}
+
+      <PopUpBox poupVisiblity={{ visible, setVisible }} />
     </>
   );
 };

@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
-const DropListBox = ({ index, itemData }) => {
+const DropListBox = ({ index, itemData, poupVisiblity }) => {
   const navigate = useNavigate();
   const handleDivClick = (id) => {
     console.log(" just clicked you");
     navigate(`/details/${id}`);
   };
+
+  const { visible, setVisible } = poupVisiblity;
 
   return (
     <>
@@ -20,20 +22,28 @@ const DropListBox = ({ index, itemData }) => {
         {/* Project Logo */}
         <div>
           <img
-            src={`https://airdroptaskbook-server.vercel.app/uploads/${itemData.projectImage.slice(
-              8
-            )}`}
+            src={itemData.projectImage}
             alt={itemData.projectName}
             className="w-10 h-10"
           />
         </div>
-        <div
-          className="bg-yellow-300 px-4 rounded-xl cursor-pointer"
-          onClick={() => {
-            handleDivClick(itemData._id);
-          }}
-        >
-          UPDATE
+        <div className="flex gap-x-4">
+          <div
+            className="bg-yellow-300 px-4 rounded-xl cursor-pointer"
+            onClick={() => {
+              handleDivClick(itemData._id);
+            }}
+          >
+            UPDATE
+          </div>
+          <div
+            className="bg-red-500 px-4 rounded-xl cursor-pointer"
+            onClick={() => {
+              setVisible(true);
+            }}
+          >
+            DELETE
+          </div>
         </div>
       </div>
     </>
