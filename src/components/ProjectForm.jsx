@@ -84,7 +84,7 @@ const ProjectForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/project/create-project",
+        "https://airdroptaskbook-server.vercel.app/project/create-project",
         formData,
         {
           headers: {
