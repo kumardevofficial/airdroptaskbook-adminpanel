@@ -81,7 +81,8 @@ const ProjectForm = () => {
     formData.append("discordLink", projectDetails.discordLink);
     formData.append("telegramLink", projectDetails.telegramLink);
     formData.append("tasks", JSON.stringify(tasks));
-
+    // http://localhost:3000/project/create-project
+    // https://airdroptaskbook-server.vercel.app/project/create-project
     try {
       const response = await axios.post(
         "https://airdroptaskbook-server.vercel.app/project/create-project",
